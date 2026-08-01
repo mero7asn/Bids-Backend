@@ -115,7 +115,7 @@ process.on("unhandledRejection", (reason) => logger.error("Unhandled Rejection",
 process.on("uncaughtException", (err) => { logger.error("Uncaught Exception", { error: err.message }); process.exit(1); });
 
 // ── DB + Server ───────────────────────────────────────────────────────────────
-const mongoUri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/bidzone";
+const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || "mongodb://127.0.0.1:27017/bidzone";
 
 mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 5000 })
   .then(() => logger.info("MongoDB connected"))

@@ -1,11 +1,4 @@
 import winston from "winston";
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const logsDir = path.join(__dirname, "../../logs");
-if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir, { recursive: true });
 
 const { combine, timestamp, printf, colorize, errors } = winston.format;
 
@@ -32,8 +25,6 @@ const logger = winston.createLogger({
   format: isDev ? devFormat : prodFormat,
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: path.join(logsDir, "error.log"), level: "error" }),
-    new winston.transports.File({ filename: path.join(logsDir, "combined.log") }),
   ],
 });
 
