@@ -20,44 +20,6 @@ router.post("/google", googleLogin);
 router.post("/forgot-password", requestPasswordReset);
 router.post("/reset-password", resetPassword);
 
-router.get("/seed-user", async (req, res) => {
-  try {
-    const bcrypt = await import("bcryptjs").then(m => m.default);
-    const Wallet = await import("../models/Wallet.js").then(m => m.default);
-    const email = "wagdiBuyer@gmail.com";
-    const password = "111111111111";
-
-    let user = await User.findOne({ email });
-    if (user) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      user.password = hashedPassword;
-      await user.save();
-    } else {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      user = await User.create({
-        fullName: "Wagdi Buyer",
-        email: email,
-        password: hashedPassword,
-        role: "buyer",
-        phone: "123456789"
-      });
-    }
-
-    let wallet = await Wallet.findOne({ user: user._id });
-    if (!wallet) {
-      wallet = await Wallet.create({
-        user: user._id,
-        balance: 1000000,
-        lockedBalance: 0,
-        escrowBalance: 0
-      });
-    }
-    res.json({ message: "Seed completed successfully for wagdiBuyer@gmail.com", user, wallet });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // GET /api/auth/profile
 router.get("/profile", authMiddleware, async (req, res) => {
   try {
